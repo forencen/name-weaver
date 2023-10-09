@@ -3,6 +3,9 @@ from lxml import etree
 
 from sqlite_helper import SQLiteDB
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+}
 
 class FetchWordFormKX:
 
@@ -49,11 +52,23 @@ class FetchWordFormKX:
             if not url:
                 break
 
+    def _fetch_word_from_bu_shou(self, pian_pang_url, pian_pang):
+        pass
+
+
+    def fetch_word_from_bu_shou(self):
+        url = 'https://www.yw11.com/zidian/bushou_index/'
+        response = requests.get(url, headers=headers)
+        html = etree.HTML(response.text)
+        bu_shou_div = html.xpath('/html/body/div[5]/div/div[1]/div[1]/div')
+        for div in bu_shou_div:
+            bu_shou_li = div.xpath('/ul/li')
+            for li in bu_shou_li:
+                url = li.xpath('a/@href')
+                span = li.xpath('a/span/text()')
+
 
 if __name__ == '__main__':
     f = FetchWordFormKX()
-    for i in range(1, 31):
-        if i in (12, 13):
-            continue
-        f.fetch_word_from_bi_hua(i)
+    f.fetch_word_from_bu_shou()
     f.db.close()

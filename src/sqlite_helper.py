@@ -44,18 +44,12 @@ class SQLiteDB:
 
         self.conn.commit()
 
-    def query_data(self, table_name, columns="*", condition=None):
+    def query_data(self, sql):
         """
         查询数据
-        :param table_name: 表格名称
-        :param columns: 要查询的列，默认为所有列
-        :param condition: 查询条件，例如："age > 18"
         :return: 查询结果，列表形式
         """
-        query_sql = f"SELECT {columns} FROM {table_name}"
-        if condition:
-            query_sql += f" WHERE {condition}"
-        self.cursor.execute(query_sql)
+        self.cursor.execute(sql)
         return self.cursor.fetchall()
 
     def close(self):
